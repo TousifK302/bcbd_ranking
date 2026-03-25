@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCBD Beyblade X — Bangladesh National Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red-deep: #6b0000;
+    --red-mid: #8b1a1a;
+    --red-bright: #c0392b;
+    --gold: #f5c518;
+    --silver: #b8c5d1;
+    --bronze: #cd7f32;
+    --cyan: #5de8f0;
+    --navy: #0d1b2a;
+    --white: #f0f4f8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0000;
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Animated BG ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, #8b000055 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 80% 100%, #4a000044 0%, transparent 60%),
+      repeating-linear-gradient(
+        -45deg,
+        transparent 0px, transparent 40px,
+        rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
+      );
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Spinning beyblade watermark */
+  body::after {
+    content: '✕';
+    position: fixed;
+    bottom: -80px;
+    right: -80px;
+    font-size: 400px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.025);
+    animation: spin 40s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+    font-family: 'Cinzel Decorative', serif;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 48px 20px 32px;
+    border-bottom: 2px solid rgba(93,232,240,0.2);
+    background: linear-gradient(180deg, rgba(139,0,0,0.5) 0%, transparent 100%);
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(93,232,240,0.3);
+    border-radius: 4px;
+    padding: 6px 18px;
+    margin-bottom: 16px;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+
+  .header-badge::before, .header-badge::after {
+    content: '◆';
+    font-size: 0.5rem;
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.4rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, #fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+  }
+
+  /* ── PODIUM ── */
+  .podium-section {
+    position: relative;
+    z-index: 10;
+    padding: 48px 20px 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 5px;
+    color: rgba(93,232,240,0.5);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .podium-card {
+    flex: 1;
+    max-width: 220px;
+    border-radius: 6px 6px 0 0;
+    padding: 20px 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: riseUp 0.8s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .podium-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .podium-card.rank-1 {
+    background: linear-gradient(180deg, rgba(245,197,24,0.2) 0%, rgba(245,197,24,0.05) 100%);
+    border: 1px solid rgba(245,197,24,0.5);
+    min-height: 200px;
+    animation-delay: 0.1s;
+  }
+
+  .podium-card.rank-2 {
+    background: linear-gradient(180deg, rgba(184,197,209,0.15) 0%, rgba(184,197,209,0.03) 100%);
+    border: 1px solid rgba(184,197,209,0.35);
+    min-height: 160px;
+    animation-delay: 0.2s;
+  }
+
+  .podium-card.rank-3 {
+    background: linear-gradient(180deg, rgba(205,127,50,0.15) 0%, rgba(205,127,50,0.03) 100%);
+    border: 1px solid rgba(205,127,50,0.35);
+    min-height: 140px;
+    animation-delay: 0.3s;
+  }
+
+  @keyframes riseUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .podium-rank {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .rank-1 .podium-rank { color: var(--gold); text-shadow: 0 0 20px rgba(245,197,24,0.6); }
+  .rank-2 .podium-rank { color: var(--silver); text-shadow: 0 0 15px rgba(184,197,209,0.4); }
+  .rank-3 .podium-rank { color: var(--bronze); text-shadow: 0 0 15px rgba(205,127,50,0.4); }
+
+  .podium-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .podium-points {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .rank-1 .podium-points { color: var(--gold); }
+  .rank-2 .podium-points { color: var(--silver); }
+  .rank-3 .podium-points { color: var(--bronze); }
+
+  .podium-pts-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+
+  .crown {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+    display: block;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* ── FILTERS ── */
+  .controls {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto 12px;
+    padding: 0 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(93,232,240,0.2);
+    color: #fff;
+    padding: 10px 16px 10px 40px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap input:focus { border-color: rgba(93,232,240,0.5); }
+  .search-wrap input::placeholder { opacity: 0.35; }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+    font-size: 1rem;
+  }
+
+  .count-badge {
+    background: rgba(93,232,240,0.1);
+    border: 1px solid rgba(93,232,240,0.2);
+    color: var(--cyan);
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    border-bottom: 2px solid rgba(93,232,240,0.25);
+  }
+
+  th {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  th.right { text-align: right; }
+  th.center { text-align: center; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s;
+    animation: fadeRow 0.4s ease both;
+  }
+
+  @keyframes fadeRow {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  tbody tr:hover {
+    background: rgba(93,232,240,0.06);
+  }
+
+  tbody tr.top3 { background: rgba(245,197,24,0.04); }
+  tbody tr.top3:hover { background: rgba(245,197,24,0.08); }
+
+  td {
+    padding: 13px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  .td-rank {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    width: 60px;
+  }
+
+  .td-rank.gold { color: var(--gold); }
+  .td-rank.silver { color: var(--silver); }
+  .td-rank.bronze { color: var(--bronze); }
+
+  .td-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+  }
+
+  .td-points {
+    text-align: right;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 1px;
+  }
+
+  .td-achievements {
+    text-align: center;
+    min-width: 120px;
+  }
+
+  .medal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin: 0 2px;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .medal.gold { background: var(--gold); color: #000; }
+  .medal.silver { background: var(--silver); color: #000; }
+  .medal.bronze { background: var(--bronze); color: #fff; }
+
+  .bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar {
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--cyan), rgba(93,232,240,0.2));
+    transition: width 1s cubic-bezier(0.22,1,0.36,1);
+    min-width: 4px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 20px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .divider-line {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(93,232,240,0.3), transparent);
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .td-achievements { display: none; }
+    th.ach-col { display: none; }
+    .podium { gap: 8px; }
+    .podium-card { padding: 14px 10px; }
+    .podium-name { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">BCBD · Bangladesh</div>
+  <h1>Beyblade X<br>National Leaderboard</h1>
+  <p class="subtitle">Cumulative Rankings · All Seasons</p>
+</header>
+
+<!-- PODIUM -->
+<section class="podium-section">
+  <p class="section-label">◆ &nbsp; Hall of Champions &nbsp; ◆</p>
+  <div class="podium">
+    <div class="podium-card rank-2">
+      <div class="podium-rank">#2</div>
+      <div class="podium-name">Hrid BBX</div>
+      <div class="podium-points">127</div>
+      <div class="podium-pts-label">points</div>
+    </div>
+    <div class="podium-card rank-1">
+      <span class="crown">👑</span>
+      <div class="podium-rank">#1</div>
+      <div class="podium-name">King Manju</div>
+      <div class="podium-points">158</div>
+      <div class="podium-pts-label">points</div>
+    </div>
+    <div class="podium-card rank-3">
+      <div class="podium-rank">#3</div>
+      <div class="podium-name">Dean</div>
+      <div class="podium-points">107</div>
+      <div class="podium-pts-label">points</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr class="divider-line"></div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search blader..." oninput="filterTable()">
+  </div>
+  <div class="count-badge" id="countBadge">38 Bladers</div>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrap">
+  <table id="leaderTable">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th class="right">Points</th>
+        <th class="center ach-col">Achievements</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <div id="noResults" class="no-results" style="display:none;">No bladers found</div>
+</div>
+
+<footer>BCBD Beyblade X · Bangladesh · Official Leaderboard</footer>
+
+<script>
+const players = [
+  { rank:1,  name:"King Manju",    pts:158, medals:[{t:'gold',n:1},{t:'silver',n:2},{t:'silver',n:1},{t:'bronze',n:1}] },
+  { rank:2,  name:"Hrid BBX",      pts:127, medals:[{t:'silver',n:2},{t:'silver',n:1}] },
+  { rank:3,  name:"Dean",          pts:107, medals:[{t:'gold',n:1}] },
+  { rank:4,  name:"Blader Ryuki",  pts:103, medals:[{t:'gold',n:1}] },
+  { rank:5,  name:"Blader Shark",  pts:99,  medals:[{t:'bronze',n:1},{t:'bronze',n:1}] },
+  { rank:6,  name:"Blader Gorib",  pts:93,  medals:[{t:'gold',n:1}] },
+  { rank:7,  name:"Hunter [XIV]",  pts:88,  medals:[{t:'silver',n:1}] },
+  { rank:8,  name:"Blader S",      pts:80,  medals:[{t:'gold',n:1}] },
+  { rank:9,  name:"Blader Space",  pts:59,  medals:[{t:'bronze',n:1}] },
+  { rank:10, name:"Aurpo",         pts:56,  medals:[] },
+  { rank:11, name:"Arnob",         pts:46,  medals:[] },
+  { rank:12, name:"Ratul",         pts:45,  medals:[] },
+  { rank:13, name:"Shadow SF",     pts:42,  medals:[] },
+  { rank:14, name:"Ahnaf",         pts:38,  medals:[] },
+  { rank:15, name:"Death Gun",     pts:37,  medals:[{t:'gold',n:1}] },
+  { rank:16, name:"RawFuel",       pts:28,  medals:[] },
+  { rank:17, name:"Blader Begun 🍆",pts:28, medals:[] },
+  { rank:18, name:"Fardad",        pts:25,  medals:[] },
+  { rank:19, name:"Ibrahim",       pts:20,  medals:[] },
+  { rank:20, name:"Tahseen",       pts:20,  medals:[] },
+  { rank:21, name:"Fuad",          pts:20,  medals:[] },
+  { rank:22, name:"Mehrub",        pts:17,  medals:[] },
+  { rank:23, name:"Muntasir",      pts:12,  medals:[] },
+  { rank:24, name:"Atul",          pts:10,  medals:[] },
+  { rank:25, name:"Suhail",        pts:10,  medals:[] },
+  { rank:26, name:"Ali Mahmud",    pts:8,   medals:[] },
+  { rank:27, name:"Rogue Custom",  pts:8,   medals:[] },
+  { rank:28, name:"Joy",           pts:8,   medals:[] },
+  { rank:29, name:"Salman",        pts:8,   medals:[] },
+  { rank:30, name:"Rifat",         pts:8,   medals:[] },
+  { rank:31, name:"Rifaz",         pts:8,   medals:[] },
+  { rank:32, name:"Aaban",         pts:5,   medals:[] },
+  { rank:33, name:"Tamim",         pts:4,   medals:[] },
+  { rank:34, name:"Rafsan",        pts:4,   medals:[] },
+  { rank:35, name:"Mehran",        pts:4,   medals:[] },
+  { rank:36, name:"Morsalin",      pts:4,   medals:[] },
+  { rank:37, name:"Tahsin",        pts:4,   medals:[] },
+  { rank:38, name:"Shifat",        pts:1,   medals:[] },
+];
+
+const maxPts = players[0].pts;
+
+function medalHTML(medals) {
+  if (!medals.length) return '<span style="opacity:0.2;font-size:0.7rem;">—</span>';
+  return medals.map(m => {
+    const count = m.n > 1 ? `×${m.n}` : '';
+    return `<span class="medal ${m.t}">${m.n}</span>`;
+  }).join('');
+}
+
+function rankClass(r) {
+  if (r === 1) return 'gold';
+  if (r === 2) return 'silver';
+  if (r === 3) return 'bronze';
+  return '';
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  document.getElementById('noResults').style.display = data.length ? 'none' : 'block';
+  document.getElementById('countBadge').textContent = `${data.length} Blader${data.length !== 1 ? 's' : ''}`;
+
+  data.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    if (p.rank <= 3) tr.classList.add('top3');
+    tr.style.animationDelay = `${i * 0.03}s`;
+    const barW = Math.round((p.pts / maxPts) * 160);
+    tr.innerHTML = `
+      <td class="td-rank ${rankClass(p.rank)}">#${p.rank}</td>
+      <td class="td-name">
+        <div class="bar-wrap">
+          <span>${p.name}</span>
+        </div>
+      </td>
+      <td class="td-points">${p.pts}</td>
+      <td class="td-achievements">${medalHTML(p.medals)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = players.filter(p => p.name.toLowerCase().includes(q));
+  renderTable(filtered);
+}
+
+renderTable(players);
+</script>
+</body>
+</html>

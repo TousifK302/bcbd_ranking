@@ -476,7 +476,7 @@
     <span class="search-icon">🔍</span>
     <input type="text" id="searchInput" placeholder="Search blader..." oninput="filterTable()">
   </div>
-  <div class="count-badge" id="countBadge">36 Bladers</div>
+  <div class="count-badge">Search</div>
 </div>
 
 <div class="table-wrap">
@@ -519,22 +519,24 @@ const players = [
   { rank:19, name:"Tahseen",         pts:20,  medals:[] },
   { rank:20, name:"Fuad",            pts:20,  medals:[] },
   { rank:21, name:"Mehrub",          pts:17,  medals:[] },
-  { rank:22, name:"Muntasir",        pts:12,  medals:[] },
-  { rank:23, name:"Atul",            pts:10,  medals:[] },
-  { rank:24, name:"Suhail",          pts:10,  medals:[] },
-  { rank:25, name:"Ali Mahmud",      pts:8,   medals:[] },
-  { rank:26, name:"Rogue Custom",    pts:8,   medals:[] },
-  { rank:27, name:"Joy",             pts:8,   medals:[] },
-  { rank:28, name:"Salman",          pts:8,   medals:[] },
-  { rank:29, name:"Rifat",           pts:8,   medals:[] },
-  { rank:30, name:"Rifaz",           pts:8,   medals:[] },
-  { rank:31, name:"Aaban",           pts:5,   medals:[] },
-  { rank:32, name:"Tamim",           pts:4,   medals:[] },
-  { rank:33, name:"Rafsan",          pts:4,   medals:[] },
-  { rank:34, name:"Mehran",          pts:4,   medals:[] },
-  { rank:35, name:"Morsalin",        pts:4,   medals:[] },
-  { rank:36, name:"Tahsin",          pts:4,   medals:[] },
-  { rank:37, name:"Shifat",          pts:1,   medals:[] },
+  { rank:22, name:"Sinan",           pts:16,  medals:[] },
+  { rank:23, name:"Muntasir",        pts:12,  medals:[] },
+  { rank:23, name:"Muntasir",        pts:12,  medals:[] },
+  { rank:24, name:"Atul",            pts:10,  medals:[] },
+  { rank:25, name:"Suhail",          pts:10,  medals:[] },
+  { rank:26, name:"Ali Mahmud",      pts:8,   medals:[] },
+  { rank:27, name:"Rogue Custom",    pts:8,   medals:[] },
+  { rank:28, name:"Joy",             pts:8,   medals:[] },
+  { rank:29, name:"Salman",          pts:8,   medals:[] },
+  { rank:30, name:"Rifat",           pts:8,   medals:[] },
+  { rank:31, name:"Rifaz",           pts:8,   medals:[] },
+  { rank:32, name:"Aaban",           pts:5,   medals:[] },
+  { rank:33, name:"Tamim",           pts:4,   medals:[] },
+  { rank:34, name:"Rafsan",          pts:4,   medals:[] },
+  { rank:35, name:"Mehran",          pts:4,   medals:[] },
+  { rank:36, name:"Morsalin",        pts:4,   medals:[] },
+  { rank:37, name:"Tahsin",          pts:4,   medals:[] },
+  { rank:38, name:"Shifat",          pts:1,   medals:[] },
 ];
 
 const maxPts = players[0].pts;
@@ -555,7 +557,6 @@ function renderTable(data) {
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
   document.getElementById('noResults').style.display = data.length ? 'none' : 'block';
-  document.getElementById('countBadge').textContent = `${data.length} Blader${data.length !== 1 ? 's' : ''}`;
 
   data.forEach((p, i) => {
     const tr = document.createElement('tr');
